@@ -1,25 +1,70 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import movieList from './data/movielist.json'
+import genreList from './data/genrelist.json'
+
+class Movie extends Component {
+  render () {
+    const props = this.props
+    return (
+      <li>{props.movie.original_title}</li>
+    )
+  }
+}
 
 class App extends Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      movieList : movieList.results,
+      genreList : genreList.genres,
+      selectedGenreId : ''
+    }
+  }
+
+  selectGenre = (event) => {
+    //console.log(event.target.value)
+    this.setState({selectedGenreId: event.target.value});
+  }
+
   render() {
+    const filteredMovieList = this.state.movieList.filter(movie => {
+      const selectedGenreId = this.state.selectedGenreId
+      if(selectedGenreId.length < 1 ) return true // if empty show everything
+      return movie.genre_ids.some(id => { 
+        return id == selectedGenreId
+      })
+    })
+
+    const movieElementArray = filteredMovieList.map(movie => {
+      return (
+        <Movie key={movie.id} movie={movie} />
+      )
+    })
+
+    const genreOptionsArray = this.state.genreList.map(genre => {
+      return (
+        <option 
+          key={genre.id} 
+          value={genre.id} 
+        >
+          {genre.name}
+        </option>
+      )
+    })
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="">
+        <select 
+          onChange={this.selectGenre}
+          value={this.state.selectedGenreId}
+        >
+          <option value="">-</option>
+          {genreOptionsArray}
+        </select>
+        <ul>
+          {movieElementArray}
+        </ul>
       </div>
     );
   }
