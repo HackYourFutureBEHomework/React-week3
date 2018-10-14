@@ -8,13 +8,11 @@ class CurrentcyInput extends Component {
         return (
             <div>
                 <input 
-                    id={this.props.inputName}
                     type='number' 
                     value={this.props.value}
                     onChange={this.props.changeAmount}
                 ></input>
                 <select 
-                    id={this.props.currencyIdName}
                     value={this.props.selectedCurrency}
                     onChange={this.props.changeCurrency}
                 >
@@ -29,10 +27,14 @@ class CurrencyCalculator extends Component {
     constructor () {
         super();
         this.state = {
-            input1 : 0,
-            input2 : 0,
-            currencyId1 :1,
-            currencyId2 :2,
+            input1 : {
+                value : 0,
+                currencyId : 1
+            },
+            input2 : {
+                value: 0,
+                currencyId : 2
+            },
             currencies : [
                 {
                     id: 1,
@@ -42,89 +44,98 @@ class CurrencyCalculator extends Component {
                 {
                     id: 2,
                     name: 'Euro',
-                    rate: 0.8
+                    rate: 0.86
                 },
                 {
                     id: 3,
                     name: 'Yen',
-                    rate: 2.4
+                    rate: 112.21
                 },
                 {
                     id: 4,
-                    name: 'Frank',
-                    rate: 0.3
+                    name: 'Bitcoin',
+                    rate: 0.00016
+                },
+                {
+                    id:5,
+                    name: 'Yuan',
+                    rate: 6.92
                 }
             ]
         } 
     }
-    convert1 = (value, currencyId) => {
-            value = parseFloat(value)
-            const currency = this.state.currencies.find(currency => currency.id == currencyId)
-            const currencyRate = currency.rate
-            console.log(currencyRate)
-            // TODO: First to Dollar
-            return  value * currencyRate
 
+    getCurrencyRateById = (id) => {
+        const currency = this.state.currencies.find(currency => currency.id === parseInt(id))
+        console.log(currency)
+        return (currency.rate)? currency.rate : 1
     }
 
-    convert2 = (value, currencyId) => {
-        value = parseFloat(value)
-        const currency = this.state.currencies.find(currency => currency.id == currencyId)
-        const currencyRate = currency.rate
-        console.log(currencyRate)
-        // TODO: First to Dollar
-        return  value / currencyRate
-
-}
+    convert = (from, to) => {
+        const dollarValue = from.value / this.getCurrencyRateById(from.currencyId)
+        to.value = dollarValue * this.getCurrencyRateById(to.currencyId)
+        return to
+    }
 
     changeCurrency1 = (event) => {
-        const value = event.target.value
+        // Copy state Use a spread function otherwise you change state without setState
+        const input1 = {...this.state.input1}
+        const input2 = {...this.state.input2}
+        input1.currencyId = parseInt(event.target.value)
         this.setState({
-            currencyId1:value,
-            input2: this.convert2(this.state.input1, value)
+            input1: input1,
+            input2: this.convert(input1, input2)
         })
-
     }
 
     changeCurrency2 = (event) => {
-        const value = event.target.value
+        // Copy state Use a spread function otherwise you change state without setState
+        const input1 = {...this.state.input1}
+        const input2 = {...this.state.input2}
+        input2.currencyId = parseInt(event.target.value)
         this.setState({
-            currencyId2: value,
-            input1: this.convert1(this.state.input2, value)
+            input1: this.convert(input2, input1),
+            input2: input2
         })
-
     }
 
     changeAmount1 = (event) => {
-        const value = parseFloat(event.target.value)
+        // Copy state Use a spread function otherwise you change state without setState
+        const input1 = {...this.state.input1}
+        const input2 = {...this.state.input2}
+        input1.value = parseFloat(event.target.value === null? 0:event.target.value)
         this.setState({
-            input1: value,
-            input2: this.convert1(value, this.state.currencyId2)
+            input1: input1,
+            input2: this.convert(input1, input2)
         })
     }
 
     changeAmount2 = (event) => {
-        const value = parseFloat(event.target.value)
+        // Copy state Use a spread function otherwise you change state without setState
+        const input1 = {...this.state.input1}
+        const input2 = {...this.state.input2}
+        input2.value = parseFloat(event.target.value === null? 0:event.target.value)
         this.setState({
-            input2: value,
-            input1: this.convert2(value, this.state.currencyId2)
+            input1: this.convert(input2, input1),
+            input2: input2
         })
     }
 
     render () {
         return (
             <div className='currency_calculator'>
+                <h1>Currency converter</h1>
                 <CurrentcyInput
                     currencies={this.state.currencies}
-                    value={this.state.input1}
-                    selectedCurrency={this.state.currencyId1}
+                    value={this.state.input1.value}
+                    selectedCurrency={this.state.input1.currencyId}
                     changeCurrency={this.changeCurrency1}
                     changeAmount={this.changeAmount1}
                 />
                 <CurrentcyInput 
                     currencies={this.state.currencies}
-                    value={this.state.input2}
-                    selectedCurrency={this.state.currencyId2}
+                    value={this.state.input2.value}
+                    selectedCurrency={this.state.input2.currencyId}
                     changeCurrency={this.changeCurrency2}
                     changeAmount={this.changeAmount2}
                 />

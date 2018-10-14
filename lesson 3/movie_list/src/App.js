@@ -27,17 +27,15 @@ class App extends Component {
 
   selectGenre = (event) => {
     //console.log(event.target.value)
-    this.setState({selectedGenreId: event.target.value});
+    this.setState({selectedGenreId: parseInt(event.target.value)});
   }
 
   render() {
     const filteredMovieList = this.state.movieList.filter(movie => {
       const selectedGenreId = this.state.selectedGenreId
       if(selectedGenreId.length < 1 ) return true // if empty show everything
-      console.log('filtering genre ids for movie: ', movie.genre_ids)
       return movie.genre_ids.some(id => { 
-        console.log('comparing id', id, 'with', selectedGenreId)
-        return id == selectedGenreId
+        return id === selectedGenreId
       })
     })
 
@@ -61,6 +59,7 @@ class App extends Component {
       <div className="">
         <CurrencyCalculator/>
         <hr/>
+        <h1>Selectbox filter</h1>
         <select 
           onChange={this.selectGenre}
           value={this.state.selectedGenreId}
