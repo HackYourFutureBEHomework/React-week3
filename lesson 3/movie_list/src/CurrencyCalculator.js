@@ -66,9 +66,7 @@ class CurrencyCalculator extends Component {
     }
 
     getCurrencyRateById = (id) => {
-        const currency = this.state.currencies.find(currency => currency.id === parseInt(id))
-        console.log(currency)
-        return (currency.rate)? currency.rate : 1
+        return this.state.currencies.find(currency => currency.id === parseInt(id)).rate
     }
 
     convert = (from, to) => {
