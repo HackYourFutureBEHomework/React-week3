@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import movieList from './data/movielist.json'
 import genreList from './data/genrelist.json'
+import CurrencyCalculator from './CurrencyCalculator'
 
 class Movie extends Component {
   render () {
@@ -19,7 +20,8 @@ class App extends Component {
     this.state = {
       movieList : movieList.results,
       genreList : genreList.genres,
-      selectedGenreId : ''
+      selectedGenreId : '',
+
     }
   }
 
@@ -32,7 +34,9 @@ class App extends Component {
     const filteredMovieList = this.state.movieList.filter(movie => {
       const selectedGenreId = this.state.selectedGenreId
       if(selectedGenreId.length < 1 ) return true // if empty show everything
+      console.log('filtering genre ids for movie: ', movie.genre_ids)
       return movie.genre_ids.some(id => { 
+        console.log('comparing id', id, 'with', selectedGenreId)
         return id == selectedGenreId
       })
     })
@@ -55,6 +59,8 @@ class App extends Component {
     })
     return (
       <div className="">
+        <CurrencyCalculator/>
+        <hr/>
         <select 
           onChange={this.selectGenre}
           value={this.state.selectedGenreId}
