@@ -9,7 +9,7 @@ Everything from lesson 3
 
 ## Homework 3
 
-Build a todo application [assignment](https://github.com/HackYourFutureBelgium/React-week2/tree/master/homework%202)
+Build a todo application [assignment](https://github.com/HackYourFutureBelgium/React-week3/tree/master/homework%203)
 
 ## Extra
 
