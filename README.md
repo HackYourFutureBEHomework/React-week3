@@ -14,3 +14,5 @@ Build a todo application [assignment](https://github.com/HackYourFutureBelgium/R
 ## Extra
 
 - [Thinking in React](https://reactjs.org/docs/thinking-in-react.html)
+- [Controller components](https://frontarm.com/articles/controller-components/)
+- [How should you seperate your components](https://frontarm.com/articles/how-should-i-separate-components/)
